@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personajes de Dragon Ball</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-4">Personajes de Dragon Ball</h1>
+        <div class="row">
+            {% for personaje in personajes['items'] %}
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img src="{{ personaje['image'] }}" class="card-img-top custom-img" alt="{{ personaje['name'] }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ personaje['name'] }}</h5>
+                        <p class="card-text">Ki: {{ personaje['ki'] }}</p>
+                        <p class="card-text">Raza: {{ personaje['race'] }}</p>
+                        <p class="card-text">Género: {{ personaje['gender'] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Planet Modal -->
+    <div class="modal fade" id="planetModal" tabindex="-1" role="dialog" aria-labelledby="planetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="planetModalLabel">Planeta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="planetBody">
+                    <!-- Planet details will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transformations Modal -->
+    <div class="modal fade" id="transformationsModal" tabindex="-1" role="dialog" aria-labelledby="transformationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transformationsModalLabel">Transformaciones</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="transformationsBody">
+                    <!-- Transformations details will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function showPlanet(planetName) {
+      $('#planetBody').html(`<p>Nombre del planeta: ${planetName}</p>`);
+      $('#planetModal').modal('show');
+  }
+
+  function showTransformations(transformations) {
+        // Parsear la cadena JSON en un arreglo de objetos JavaScript
+        var transformationsArray = JSON.parse(transformations);
+        
+        // Luego, puedes trabajar con transformationsArray como un arreglo normal
+        $('#transformationsBody').html('');
+        transformationsArray.forEach(transformation => {
+            $('#transformationsBody').append(`<p>Nombre de la transformación: ${transformation.name}</p>`);
+        });
+        $('#transformationsModal').modal('show');
+    }
+
+  $(document).ready(function() {
+    $('.verMas').on('click', function() {
+      var personajeId = $(this).data('id');
+      $('#descripcion_' + personajeId).toggle();
+    });
+  });
+</script>
+
+<style>
+
+  .container-img {
+    width: 100%;
+    height: 100%;
+    --s: 105px; /* control the size */
+    --c1: #b9b9b9;
+    --c2: #dcdcdc;
+    --c3: #fafafa;
+  
+    background: conic-gradient(
+          from 75deg,
+          var(--c1) 15deg,
+          var(--c2) 0 30deg,
+          #0000 0 180deg,
+          var(--c2) 0 195deg,
+          var(--c1) 0 210deg,
+          #0000 0
+        )
+        calc(0.5 * var(--s)) calc(0.5 * var(--s) / 0.577),
+      conic-gradient(
+        var(--c1) 30deg,
+        var(--c3) 0 75deg,
+        var(--c1) 0 90deg,
+        var(--c2) 0 105deg,
+        var(--c3) 0 150deg,
+        var(--c2) 0 180deg,
+        var(--c3) 0 210deg,
+        var(--c1) 0 256deg,
+        var(--c2) 0 270deg,
+        var(--c1) 0 286deg,
+        var(--c2) 0 331deg,
+        var(--c3) 0
+      );
+    background-size: var(--s) calc(var(--s) / 0.577);
+    opacity: 0.8;
+  }
+    .custom-img {
+      width: 180px;
+      height: 300px;
+    }
+  
+    .custom-img:hover {
+      transform: scale(1.2);
+      transition-property: transform;
+      transition-duration: 0.5s; /* Cambia el valor según lo deseado */
+      transition-timing-function: ease;
+  }
+  </style>
